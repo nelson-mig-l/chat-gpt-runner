@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { createGlowMaterial } from "./glowMaterial";
 
 export class Obstacles {
   private obstacles: THREE.Mesh[] = [];
@@ -30,6 +31,12 @@ export class Obstacles {
         0.5,
         -20
       );
+      const glow = new THREE.Mesh(
+        geometry.clone(),
+        createGlowMaterial(0xff0000, 2.0)
+      );
+      glow.scale.set(1.2, 1.2, 1.2);
+      obstacle.add(glow);
 
       this.scene.add(obstacle);
       this.obstacles.push(obstacle);

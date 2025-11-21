@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { createGlowMaterial } from "./glowMaterial";
 
 export class Trees {
   private trees: THREE.Mesh[] = [];
@@ -26,6 +27,15 @@ export class Trees {
 
       const right = new THREE.Mesh(geometry, material);
       right.position.set(6, 1.5, -20);
+
+      const glow = new THREE.Mesh(
+        geometry.clone(),
+        createGlowMaterial(0x00ff00, 1.5)
+      );
+      glow.scale.set(1.2, 1.2, 1.2);
+      right.add(glow);
+      left.add(glow);
+
       this.scene.add(right);
       this.trees.push(right);
     }
