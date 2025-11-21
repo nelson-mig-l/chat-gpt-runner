@@ -14,6 +14,9 @@ export class World {
   private obstacles: Obstacles;
   private trees: Trees;
 
+  private textureLoader = new THREE.TextureLoader();
+  private sky!: THREE.Mesh;
+
   constructor(private canvas: HTMLCanvasElement) {
     this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
     this.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -34,6 +37,8 @@ export class World {
     this.obstacles = new Obstacles(this.scene);
     this.trees = new Trees(this.scene);
 
+    this.addSky();
+
     window.addEventListener("resize", () => this.onResize());
     window.addEventListener("keydown", (e) => this.onKeyDown(e));
   }
@@ -48,6 +53,21 @@ export class World {
     if (event.key === "ArrowLeft") this.player.position.x -= 1;
     if (event.key === "ArrowRight") this.player.position.x += 1;
   }
+
+  private addSky() {
+    const skyTexture = this.textureLoader.load("/src/textures/synthwave-sky.png");
+    skyTexture.wrapS = skyTexture.wrapT = THREE.MirroredRepeatWrapping;
+
+    const geometry = new THREE.SphereGeometry(200, 64, 64);
+    const material = new THREE.MeshBasicMaterial({
+      map: skyTexture,
+      side: THREE.BackSide
+    });
+
+    this.sky = new THREE.Mesh(geometry, material);
+    this.scene.add(this.sky);
+  }
+
 
   start = () => {
     const tick = () => {
