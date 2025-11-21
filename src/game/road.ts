@@ -5,11 +5,17 @@ export class Road {
   private segments: THREE.Mesh[] = [];
 
   constructor(private scene: THREE.Scene) {
+    const loader = new THREE.TextureLoader();
+    const gridTex = loader.load("/src/textures/neon-grid.png");
+    gridTex.wrapS = gridTex.wrapT = THREE.RepeatWrapping;
+    gridTex.repeat.set(1, 6);   // vertical tiling down the road
+
     const geometry = new THREE.PlaneGeometry(10, 50);
     const glowGeometry = geometry.clone();
     const material = new THREE.MeshBasicMaterial({
-      color: 0x303030,
-      side: THREE.DoubleSide,
+      map: gridTex
+      // color: 0x303030,
+      // side: THREE.DoubleSide,
     });
     const glowMaterial = createGlowMaterial(0xffffff, 0.7);
 
